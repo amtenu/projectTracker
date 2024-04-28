@@ -84,7 +84,12 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public Project updateProject(Project updatedProject, Long id) throws Exception {
-        return null;
+        Project project=getProjectById(id);
+        project.setName(updatedProject.getName());
+        project.setDescription(updatedProject.getDescription());
+        project.setTags(updatedProject.getTags());
+
+        return projectRepository.save(project);
     }
 
     @Override
