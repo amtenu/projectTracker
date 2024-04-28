@@ -16,9 +16,13 @@ public class ProjectServiceImpl implements ProjectService{
     @Autowired
     private ProjectRepository projectRepository;
 
-    
+    @Autowired
+    private UserService userService;
+
+
     @Override
     public Project createProject(Project project, User user) throws Exception {
+
         return null;
     }
 
