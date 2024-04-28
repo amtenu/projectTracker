@@ -3,6 +3,7 @@ package com.amtenu.controller;
 
 import com.amtenu.models.Project;
 import com.amtenu.models.User;
+import com.amtenu.response.MessageResponse;
 import com.amtenu.service.ProjectService;
 import com.amtenu.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,9 +63,22 @@ public class ProjectController {
             @PathVariable Long projectId,
             @RequestHeader("Authorization") String jwt,
             @RequestBody Project project) throws Exception {
-       
+
         Project updatedProject = projectService.updateProject(project, projectId);
         return new ResponseEntity<>(updatedProject, HttpStatus.OK);
+
+
+    }
+
+    @DeleteMapping("/{projectId}")
+    public ResponseEntity<MessageResponse> deleteProject(
+            @PathVariable Long projectId,
+            @RequestHeader("Authorization") String jwt
+            ) throws Exception {
+        User user = userService.findUserProfileByJwt(jwt);
+        projectService.deleteProject(projectId, user.getId());
+        MessageResponse message = new MessageResponse("Project deleted Successfully");
+        return new ResponseEntity<>(message, HttpStatus.OK);
 
 
     }
