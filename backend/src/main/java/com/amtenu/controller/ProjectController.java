@@ -1,6 +1,7 @@
 package com.amtenu.controller;
 
 
+import com.amtenu.models.Chat;
 import com.amtenu.models.Project;
 import com.amtenu.models.User;
 import com.amtenu.response.MessageResponse;
@@ -74,11 +75,32 @@ public class ProjectController {
     public ResponseEntity<MessageResponse> deleteProject(
             @PathVariable Long projectId,
             @RequestHeader("Authorization") String jwt
-            ) throws Exception {
+    ) throws Exception {
         User user = userService.findUserProfileByJwt(jwt);
         projectService.deleteProject(projectId, user.getId());
         MessageResponse message = new MessageResponse("Project deleted Successfully");
         return new ResponseEntity<>(message, HttpStatus.OK);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<Project>> getProjects(
+            @RequestParam(required = false) String keyword,
+
+            @RequestHeader("Authorization") String jwt) throws Exception {
+        User user = userService.findUserProfileByJwt(jwt);
+        List<Project> projects = projectService.searchProjects(keyword, user);
+        return new ResponseEntity<>(projects, HttpStatus.OK);
+
+
+    }
+
+    @GetMapping("/{projectId}/chat")
+    public ResponseEntity<Chat> getChatByProjectId(
+            @PathVariable Long projectId,
+            @RequestHeader("Authorization") String jwt) throws Exception {
+        User user = userService.findUserProfileByJwt(jwt);
+        Chat chat = projectService.getChatByProjectId(projectId);
+        return new ResponseEntity<>(chat, HttpStatus.OK);
 
 
     }
