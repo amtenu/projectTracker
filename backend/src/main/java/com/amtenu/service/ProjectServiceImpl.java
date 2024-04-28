@@ -8,11 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
 
-public class ProjectServiceImpl implements ProjectService{
+public class ProjectServiceImpl implements ProjectService {
     @Autowired
     private ProjectRepository projectRepository;
 
@@ -25,7 +26,7 @@ public class ProjectServiceImpl implements ProjectService{
     @Override
     public Project createProject(Project project, User user) throws Exception {
 
-        Project createdProject=new Project();
+        Project createdProject = new Project();
         createdProject.setOwner(user);
         createdProject.setTags(project.getTags());
         createdProject.setName(project.getName());
@@ -34,12 +35,12 @@ public class ProjectServiceImpl implements ProjectService{
         createdProject.getTeam().add(user);
 
 
-        Project savedProject=projectRepository.save(createdProject);
+        Project savedProject = projectRepository.save(createdProject);
 
-        Chat chat=new Chat();
+        Chat chat = new Chat();
         chat.setProject(savedProject);
 
-        Chat projectChat=chatService.createChat(chat);
+        Chat projectChat = chatService.createChat(chat);
         savedProject.setChat(projectChat);
 
         return savedProject;
@@ -48,7 +49,18 @@ public class ProjectServiceImpl implements ProjectService{
 
     @Override
     public List<Project> getProjectByTeam(User user, String category, String tag) throws Exception {
-        return null;
+        List<Project> projects = projectRepository.findByTeamContainingOrOwner(user, user);
+        if (category != null) {
+            projects = projects.stream().filter(project -> project.getCategory().equals(category))
+                    .toList();
+
+        }
+        if (tag != null) {
+            projects = projects.stream().filter(project -> project.getTags().contains(category))
+                    .toList();
+
+        }
+        return projects;
     }
 
     @Override
