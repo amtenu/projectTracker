@@ -44,4 +44,28 @@ public class ProjectController {
 
 
     }
+
+    @PostMapping
+    public ResponseEntity<Project> createProject(
+
+            @RequestHeader("Authorization") String jwt,
+            @RequestBody Project project) throws Exception {
+        User user = userService.findUserProfileByJwt(jwt);
+        Project createdProject = projectService.createProject(project, user);
+        return new ResponseEntity<>(createdProject, HttpStatus.OK);
+
+
+    }
+
+    @PatchMapping("/{projectId}")
+    public ResponseEntity<Project> updateProject(
+            @PathVariable Long projectId,
+            @RequestHeader("Authorization") String jwt,
+            @RequestBody Project project) throws Exception {
+       
+        Project updatedProject = projectService.updateProject(project, projectId);
+        return new ResponseEntity<>(updatedProject, HttpStatus.OK);
+
+
+    }
 }
