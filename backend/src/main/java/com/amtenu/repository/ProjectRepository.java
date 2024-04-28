@@ -11,7 +11,7 @@ import java.util.List;
 public interface ProjectRepository extends JpaRepository<Project, Long> {
     List<Project> findByOwner(User User);
 
-    List<Project> findByNameContainingAndTeamContaining(String partialName, User user);//query by naming convention
+    List<Project> findByNameContainingAndTeamContains(String partialName, User user);//query by naming convention
 
 
     @Query("SELECT p from Project p join p.team t where t=:user")

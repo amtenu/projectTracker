@@ -125,4 +125,12 @@ public class ProjectServiceImpl implements ProjectService {
         Project project=getProjectById(projectId);
        return project.getChat();
     }
+
+    @Override
+    public List<Project> searchProjects(String keyword, User user) throws Exception {
+     //   String partialName="%"+keyword + "%"; what we want but can be replaced
+        return projectRepository.findByNameContainingAndTeamContains(keyword,user);
+    }
+
+
 }
