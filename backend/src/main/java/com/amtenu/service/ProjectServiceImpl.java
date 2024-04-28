@@ -18,12 +18,32 @@ public class ProjectServiceImpl implements ProjectService{
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private ChatService chatService;
 
 
     @Override
     public Project createProject(Project project, User user) throws Exception {
 
-        return null;
+        Project createdProject=new Project();
+        createdProject.setOwner(user);
+        createdProject.setTags(project.getTags());
+        createdProject.setName(project.getName());
+        createdProject.setCategory(project.getCategory());
+        createdProject.setDescription(project.getDescription());
+        createdProject.getTeam().add(user);
+
+
+        Project savedProject=projectRepository.save(createdProject);
+
+        Chat chat=new Chat();
+        chat.setProject(savedProject);
+
+        Chat projectChat=chatService.createChat(chat);
+        savedProject.setChat(projectChat);
+
+        return savedProject;
+
     }
 
     @Override
