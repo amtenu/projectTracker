@@ -32,17 +32,27 @@ public class InvitationServiceImpl implements InvitationService{
     }
 
     @Override
-    public Invitation acceptInvitation(String token, Long userId) {
-        return null;
+    public Invitation acceptInvitation(String token, Long userId) throws Exception {
+        Invitation invitation=invitationRepository.findByToken(token);
+        if(invitation==null){
+            throw new Exception("Invalid invitation token ");
+        }
+        return  invitation;
     }
 
     @Override
     public String getTokenByUserMail(String userEmail) {
-        return null;
+       Invitation invitation=invitationRepository.findByEmail(userEmail);
+       return  invitation.getToken();
+
     }
 
     @Override
     public void deleteToken(String token) {
+
+       Invitation invitation=invitationRepository.findByToken(token);
+
+       invitationRepository.delete(invitation);
 
     }
 }
