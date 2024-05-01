@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,10 +19,10 @@ public class IssueDTO {
     private String title;
     private String description;
     private String status;
-    private String projectId;
+    private Long projectId;
 
     private String priority;
-    private String dueDate;
+    private LocalDate dueDate;
     private List<String> tags=new ArrayList<>();
     private Project project;
 

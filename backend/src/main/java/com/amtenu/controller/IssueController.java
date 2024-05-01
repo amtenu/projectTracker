@@ -1,14 +1,15 @@
 package com.amtenu.controller;
 
+import com.amtenu.DTO.IssueDTO;
 import com.amtenu.models.Issue;
+import com.amtenu.models.User;
 import com.amtenu.repository.ProjectRepository;
+import com.amtenu.request.IssueRequest;
 import com.amtenu.service.IssueService;
+import com.amtenu.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -21,6 +22,9 @@ public class IssueController {
 
     @Autowired
     private ProjectRepository projectRepository;
+
+    @Autowired
+   private UserService userService;
 
     @GetMapping("/{issueId}")
     public ResponseEntity<Issue> getIssueById(@PathVariable Long issueId) throws Exception {
@@ -35,7 +39,31 @@ public class IssueController {
         return ResponseEntity.ok(issue);
     }
 
+    @PostMapping("/createIssue")
+    public ResponseEntity<IssueDTO> createIssue(@RequestBody IssueRequest issue, @RequestHeader("Authorization") String token)
+            throws Exception {
 
+        User tokenUser= userService.findUserProfileByJwt(token);
+        User user=userService.findUserById(tokenUser.getId());
+
+
+            Issue createdIssue=issueService.createNewIssue(issue,tokenUser);
+            IssueDTO issueDTO=new IssueDTO();
+            issueDTO.setDescription(createdIssue.getDescription());
+            issueDTO.setId(createdIssue.getId());
+            issueDTO.setProjectId(createdIssue.getProjectId());
+            issueDTO.setAssignee(createdIssue.getAssignee());
+            issueDTO.setTitle(createdIssue.getTitle());
+            issueDTO.setTags(createdIssue.getTags());
+            issueDTO.setPriority(createdIssue.getPriority());
+            issueDTO.setDueDate(createdIssue.getDueDate());
+            issueDTO.setProject(createdIssue.getProject());
+
+            return ResponseEntity.ok(issueDTO);
+
+
+
+    }
 
 
 }
