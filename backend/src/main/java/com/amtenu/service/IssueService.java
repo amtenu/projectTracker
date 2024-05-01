@@ -14,7 +14,7 @@ public interface IssueService {
 
     Issue createNewIssue(IssueRequest issue, User user) throws Exception;
 
-  void deleteIssue(Long issueId) throws Exception;
+  void deleteIssue(Long issueId,Long userId) throws Exception;
 
    Issue addUserToIssue(Long issueId,Long userId) throws Exception;
 

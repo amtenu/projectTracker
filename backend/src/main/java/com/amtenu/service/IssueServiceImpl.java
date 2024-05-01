@@ -57,7 +57,7 @@ public class IssueServiceImpl implements IssueService {
     }
 
     @Override
-    public void deleteIssue(Long issueId) throws Exception {
+    public void deleteIssue(Long issueId ,Long userId) throws Exception {
         getIssueByID(issueId);
         issueRepository.deleteById(issueId);
     }
