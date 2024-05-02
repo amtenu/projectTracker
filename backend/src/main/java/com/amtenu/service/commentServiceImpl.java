@@ -62,7 +62,27 @@ public class commentServiceImpl implements commentService {
     }
 
     @Override
-    public void deleteComment(Long commentId, Long userId) {
+    public void deleteComment(Long commentId, Long userId) throws Exception {
+        Optional<Comments> optionalComment = commentRepository.findById(commentId);
+        Optional<User> optionalUser = userRepository.findById(userId);
+
+        if (optionalComment.isEmpty()) {
+            throw new Exception("Comment not found " + commentId);
+        }
+
+        if (optionalUser.isEmpty()) {
+            throw new Exception("User not found " + userId);
+        }
+
+        Comments comment = optionalComment.get();
+        User user = optionalUser.get();
+
+        if (comment.getUser().equals(user)) {
+            commentRepository.delete(comment);
+        } else {
+            throw new Exception("User is not allowed to delete a comment");
+        }
+
 
     }
 

@@ -11,7 +11,7 @@ public interface commentService {
 
     Comments createComment(Long commentId,Long issueId,String comment) throws Exception;
 
-    void deleteComment(Long commentId,Long userId);
+    void deleteComment(Long commentId,Long userId) throws Exception;
 
     List<Comments> findCommentsByIssueId(Long issueId);
 
