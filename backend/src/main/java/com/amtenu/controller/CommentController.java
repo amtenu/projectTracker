@@ -4,6 +4,7 @@ package com.amtenu.controller;
 import com.amtenu.models.Comments;
 import com.amtenu.models.User;
 import com.amtenu.request.CreateCommentRequest;
+import com.amtenu.response.MessageResponse;
 import com.amtenu.service.CommentService;
 import com.amtenu.service.UserService;
 import org.apache.tomcat.util.http.parser.HttpParser;
@@ -30,6 +31,18 @@ public class CommentController {
         User user = userService.findUserProfileByJwt(jwt);
         Comments createdComment = commentService.createComment(request.getIssueId(), user.getId(), request.getCommentContent());
         return new ResponseEntity<>(createdComment, HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/{commentId}")
+    public ResponseEntity<MessageResponse> deleteComment(@PathVariable Long commentId,
+                                                         @RequestHeader("Authorization") String jwt)
+            throws Exception {
+        User user = userService.findUserProfileByJwt(jwt);
+
+        commentService.deleteComment(commentId, user.getId());
+        MessageResponse response = new MessageResponse();
+        response.setMessage("Comment deleted Successfully");
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 
