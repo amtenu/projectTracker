@@ -11,9 +11,9 @@ import com.amtenu.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController("/api/messages")
 public class MessageController {
@@ -48,4 +48,17 @@ public class MessageController {
         return ResponseEntity.ok(sendMessage);
 
     }
+
+
+
+    @GetMapping("/chat/{projectID}")
+    public ResponseEntity<List<Message>> getMessagesByProjectId(@PathVariable Long projectId) throws Exception{
+        List<Message> message=messageService.getMessagesByProjectId(projectId);
+
+        return ResponseEntity.ok(message);
+    }
+
+
+
+
 }
