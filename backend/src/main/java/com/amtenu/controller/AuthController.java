@@ -38,7 +38,7 @@ public class AuthController {
     private CustomUserDetailImpl customUserDetails;
 
     @Autowired
-    private SubscriptionService subscriptionService
+    private SubscriptionService subscriptionService;
 
     @PostMapping("/signup")
     public ResponseEntity<AuthResponse>createdUserHandler(@RequestBody User user) throws Exception {

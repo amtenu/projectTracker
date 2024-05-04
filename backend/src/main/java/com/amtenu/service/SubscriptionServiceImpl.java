@@ -40,7 +40,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 
     @Override
     public Subscription getUserSubscription(Long userId) throws Exception {
-        return null;
+        return subscriptionRepository.findByUserId(userId);
     }
 
     @Override
