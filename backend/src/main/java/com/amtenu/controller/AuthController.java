@@ -7,6 +7,7 @@ import com.amtenu.repository.UserRepository;
 import com.amtenu.request.LoginRequest;
 import com.amtenu.response.AuthResponse;
 import com.amtenu.service.CustomUserDetailImpl;
+import com.amtenu.service.SubscriptionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -36,6 +37,9 @@ public class AuthController {
     @Autowired
     private CustomUserDetailImpl customUserDetails;
 
+    @Autowired
+    private SubscriptionService subscriptionService
+
     @PostMapping("/signup")
     public ResponseEntity<AuthResponse>createdUserHandler(@RequestBody User user) throws Exception {
         User userExists = userRepository.findByEmail(user.getEmail());
@@ -49,6 +53,7 @@ public class AuthController {
         createdUser.setFullName(user.getFullName());
 
         User savedUser=userRepository.save(createdUser);
+        subscriptionService.createSubscription(savedUser);
 
         Authentication authentication=new UsernamePasswordAuthenticationToken(user.getEmail(),user.getPassword());
         String jwt= JwtProvider.generateToken(authentication);
