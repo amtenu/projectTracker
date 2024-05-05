@@ -6,6 +6,6 @@ import org.springframework.stereotype.Service;
 @Service
 public interface EmailService {
 
-    public void SendEmailWithToken(String userEmail,String link) throws MessagingException;
+    void SendEmailWithToken(String userEmail, String link) throws MessagingException;
 
 }

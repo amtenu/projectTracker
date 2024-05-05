@@ -30,6 +30,6 @@ public class Chat {
     @OneToMany(mappedBy="chat",cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Message> messages= new ArrayList<>();
 
-    @ManyToOne
+    @ManyToMany
     private List<User> users=new ArrayList<>();
 }
