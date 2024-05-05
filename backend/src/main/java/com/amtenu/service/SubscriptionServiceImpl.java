@@ -45,7 +45,17 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 
     @Override
     public Subscription upGradeSubscription(Long userId, PlanType planType) {
-        return null;
+
+        Subscription subscription=new Subscription();
+        subscription.setPlanType(planType);
+        subscription.setSubscriptionStartDate(LocalDate.now());
+        if(planType.equals(PlanType.ANNUALLY)){
+            subscription.setSubscriptionEndDate(LocalDate.now().plusMonths(12));
+        } else {
+            subscription.setSubscriptionEndDate(LocalDate.now().plusMonths(1));
+        }
+
+        return subscriptionRepository.save(subscription);
     }
 
     @Override
