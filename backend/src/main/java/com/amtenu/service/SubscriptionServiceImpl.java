@@ -23,33 +23,40 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     @Override
     public Subscription createSubscription(User user) {
 
-    //let's create free subscription plan
-     Subscription subscription=new Subscription();
+        //let's create free subscription plan
+        Subscription subscription = new Subscription();
 
-     subscription.setUser(user);
-     subscription.setSubscriptionStartDate(LocalDate.now());
-     subscription.setSubscriptionEndDate(LocalDate.now().plusMonths(12));
-     subscription.setValid(true);
-     subscription.setPlanType(PlanType.FREE);
+        subscription.setUser(user);
+        subscription.setSubscriptionStartDate(LocalDate.now());
+        subscription.setSubscriptionEndDate(LocalDate.now().plusMonths(12));
+        subscription.setValid(true);
+        subscription.setPlanType(PlanType.FREE);
 
-     return subscriptionRepository.save(subscription);
-
+        return subscriptionRepository.save(subscription);
 
 
     }
 
     @Override
     public Subscription getUserSubscription(Long userId) throws Exception {
-        return subscriptionRepository.findByUserId(userId);
+       Subscription subscription=subscriptionRepository.findByUserId(userId);
+       if(!isValid(subscription)){
+           subscription.setPlanType(PlanType.FREE);
+           subscription.setSubscriptionEndDate(LocalDate.now().plusMonths(12));
+           subscription.setSubscriptionStartDate(LocalDate.now());
+       }
+
+       return subscriptionRepository.save(subscription);
+
     }
 
     @Override
     public Subscription upGradeSubscription(Long userId, PlanType planType) {
 
-        Subscription subscription=new Subscription();
+        Subscription subscription = new Subscription();
         subscription.setPlanType(planType);
         subscription.setSubscriptionStartDate(LocalDate.now());
-        if(planType.equals(PlanType.ANNUALLY)){
+        if (planType.equals(PlanType.ANNUALLY)) {
             subscription.setSubscriptionEndDate(LocalDate.now().plusMonths(12));
         } else {
             subscription.setSubscriptionEndDate(LocalDate.now().plusMonths(1));
@@ -60,6 +67,21 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 
     @Override
     public boolean isValid(Subscription subscription) {
-        return false;
+
+        if (subscription.getPlanType().equals(PlanType.FREE)) {
+            return true;
+        }
+
+        LocalDate endDate = subscription.getSubscriptionEndDate();
+        LocalDate currentDate = LocalDate.now();
+
+        return endDate.isAfter(currentDate) || endDate.isEqual(currentDate);
+
+
     }
+
+
+
+
+
 }
